@@ -92,7 +92,7 @@ public class ShollAnalysisBot extends JFrame {
         commaXYStart.setFont(defaultFont);
 
         // Inputting X start coordinate
-        startCoordinateX = new JSpinner();
+        startCoordinateX = new JSpinner ();
         startCoordinateX.setBounds(250, heightOfSecondRow, 75, 50);
         startCoordinateX.setFont(defaultFont);
 
@@ -338,6 +338,8 @@ public class ShollAnalysisBot extends JFrame {
                 startCoordinateY.setValue(Integer.valueOf(0));
                 endCoordinateX.setValue(Integer.valueOf(0));
                 endCoordinateY.setValue(Integer.valueOf(0));
+                circleCenterXValue = 0;
+                circleCenterYValue = 0;
             }
         }
         );
