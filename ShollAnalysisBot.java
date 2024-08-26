@@ -17,7 +17,14 @@ public class ShollAnalysisBot extends JFrame {
     int circleCenterXValue;
     int circleCenterYValue;
     // Array list that stores the names of the segments
-    ArrayList <String> segmentNames = new ArrayList<String>();
+    ArrayList <String> segmentNamesList = new ArrayList<String>();
+    // Temporary storage of last entry in case need to delete
+    int lastEntryCircle1 = 0;
+    int lastEntryCircle2 = 0;
+    int lastEntryCircle3 = 0;
+    int lastEntryCircle4 = 0;
+    int lastEntryCircle5 = 0;
+    int positionInArrayList = -1;
 
     private JFrame InputWindow; // First input window to type in coordinates
     private JTextField segmentName; // Text field to write in the segment name/ID
@@ -34,6 +41,8 @@ public class ShollAnalysisBot extends JFrame {
     private JButton circleButtonEnter; // Button to enter the coordinates of the circle
     private JButton segmentButtonEnter; // Button to enter the segment data
     private JButton showProgress; // Button to show progress so far, including circle counts and segments recorded
+    private JButton deleteLastEntry; // Button to delete the last entry
+    private JButton newAnalysis; // Button to start a new analysis;
     private JLayeredPane layeredPane; // Allows me to layer components
     
     int fontSize = 13; // Setting variable for font size
@@ -45,7 +54,7 @@ public class ShollAnalysisBot extends JFrame {
     public ShollAnalysisBot () {
         // Setting up format of the main window
         int frameWidth = 1000;
-        int frameHeight = 600;
+        int frameHeight = 500;
         InputWindow = new JFrame();
         InputWindow.setTitle("Coordinate Input Window");
         InputWindow.setSize(frameWidth, frameHeight);
@@ -175,36 +184,61 @@ public class ShollAnalysisBot extends JFrame {
                     <= Math.pow(12.48, 2) && 
                     (Math.pow(endCoordinateXPlaceholder-circleCenterXValue, 2) + Math.pow(endCoordinateYPlaceholder-circleCenterYValue, 2)) >= 
                     Math.pow(12.48, 2)) {
-                    circle1Counter += 1;
+                    circle1Counter ++;
+                    lastEntryCircle1 = 1;
+                } else {
+                    lastEntryCircle1 = 0; // Ensure temporary memory is reset after every new input
                 }
                 if ((Math.pow(startCoordinateXPlaceholder-circleCenterXValue, 2)+Math.pow(startCoordinateYPlaceholder-circleCenterYValue, 2))
                     <= Math.pow(24.36, 2) && 
                     (Math.pow(endCoordinateXPlaceholder-circleCenterXValue, 2) + Math.pow(endCoordinateYPlaceholder-circleCenterYValue, 2)) 
                     >= Math.pow(24.36, 2)) {
-                    circle2Counter += 1;
+                    circle2Counter ++;
+                    lastEntryCircle2 = 1;
+                } else {
+                    lastEntryCircle2 = 0;
                 }
                 if ((Math.pow(startCoordinateXPlaceholder-circleCenterXValue, 2)+Math.pow(startCoordinateYPlaceholder-circleCenterYValue, 2))
                     <= Math.pow(36.24, 2) && 
                     (Math.pow(endCoordinateXPlaceholder-circleCenterXValue, 2) + Math.pow(endCoordinateYPlaceholder-circleCenterYValue, 2)) 
                     >= Math.pow(36.24, 2)) {
-                    circle3Counter += 1;
+                    circle3Counter ++;
+                    lastEntryCircle3 = 1;
+                } else {
+                    lastEntryCircle3 = 0;
                 }
                 if ((Math.pow(startCoordinateXPlaceholder-circleCenterXValue, 2)+Math.pow(startCoordinateYPlaceholder-circleCenterYValue, 2))
                     <= Math.pow(48.12, 2) && 
                     (Math.pow(endCoordinateXPlaceholder-circleCenterXValue, 2) + Math.pow(endCoordinateYPlaceholder-circleCenterYValue, 2)) 
                     >= Math.pow(48.12, 2)) {
-                    circle4Counter += 1;
+                    circle4Counter ++;
+                    lastEntryCircle4 = 1;
+                } else {
+                    lastEntryCircle4 = 0;
                 }
                 if ((Math.pow(startCoordinateXPlaceholder-circleCenterXValue, 2)+Math.pow(startCoordinateYPlaceholder-circleCenterYValue, 2))
                     <= Math.pow(60, 2) && 
                     (Math.pow(endCoordinateXPlaceholder-circleCenterXValue, 2) + Math.pow(endCoordinateYPlaceholder-circleCenterYValue, 2)) 
                     >= Math.pow(60, 2)) {
-                    circle5Counter += 1;
+                    circle5Counter ++;
+                    lastEntryCircle5 = 1;
+                } else {
+                    lastEntryCircle5 = 0;
                 }
+
+                //Setting the position within the array list for deletion
+                positionInArrayList ++;
+
                 // Adding inputted segment name to the array list
                 String individualSegmentName = segmentName.getText();
-                segmentNames.add(individualSegmentName);
-                System.out.println(circle1Counter);
+                segmentNamesList.add(individualSegmentName + ", ");
+                
+                // Clearing the text fields after hitting enter
+                segmentName.setText("");
+                startCoordinateX.setValue(Integer.valueOf(0));
+                startCoordinateY.setValue(Integer.valueOf(0));
+                endCoordinateX.setValue(Integer.valueOf(0));
+                endCoordinateY.setValue(Integer.valueOf(0));
             }
             }
         );
@@ -219,9 +253,95 @@ public class ShollAnalysisBot extends JFrame {
         showProgress.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent a) {
-                
+                // Creating popup window that shows the progress
+                JFrame popupProgress = new JFrame();
+                popupProgress.setTitle("Progress");
+                popupProgress.setSize(500, 500);
+                popupProgress.setLayout(null);
+                popupProgress.setVisible(true);
+
+                // Formatting text that displays the name of segments scanned so far
+                JLabel segmentNames = new JLabel();
+                segmentNames.setBounds(25, 10, 200 , 100);
+                segmentNames.setFont(defaultFont);
+                segmentNames.setText("<html>" + "Segments scanned so far: " + (String) segmentNamesList.toString()
+                    + "</html>");
+
+                // Formatting text that displays the number of intersections for each circle so far
+                JLabel circleCountDisplay = new JLabel();
+                circleCountDisplay.setBounds(25, 50, 400, 300);
+                circleCountDisplay.setFont(defaultFont);
+                circleCountDisplay.setText("<html>" + "Circle 1: " + circle1Counter + ", "
+                    + "Circle 2: " + circle2Counter + ", "
+                    + "Circle 3: " + circle3Counter + ", "
+                    + "Circle 4: " + circle4Counter + ", "
+                    + "Circle 5: " + circle5Counter);
+
+                // Formatting text that displays the current circle radius
+                JLabel circleCenterDisplay = new JLabel();
+                circleCenterDisplay.setBounds(25, 100, 200, 50);
+                circleCenterDisplay.setFont(defaultFont);
+                circleCenterDisplay.setText("<html>" + "Circle center X: " + circleCenterXValue
+                    + ", Circle center Y: " + circleCenterYValue);
+
+                popupProgress.add(segmentNames);
+                popupProgress.add(circleCountDisplay);
+                popupProgress.add(circleCenterDisplay);
             }
         }); 
+
+        // Formatting button to delete last entry
+        deleteLastEntry = new JButton();
+        deleteLastEntry.setBounds(250, 350, 150, 50);
+        deleteLastEntry.setFont(defaultFont);
+        deleteLastEntry.setForeground(Color.RED);
+        deleteLastEntry.setText("<html>" + "Delete the last entry" + "</html>");
+
+        // Making button delete the last entry from data 
+        deleteLastEntry.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent a) {
+                circle1Counter -= lastEntryCircle1;
+                circle2Counter -= lastEntryCircle2;
+                circle3Counter -= lastEntryCircle3;
+                circle4Counter -= lastEntryCircle4;
+                circle5Counter -= lastEntryCircle5;
+                segmentNamesList.remove(positionInArrayList);
+            }
+            }
+        );
+
+        // Formatting to button to start a new analysis
+        newAnalysis = new JButton();
+        newAnalysis.setBounds (750, 350, 150, 50);
+        newAnalysis.setFont(defaultFont);
+        newAnalysis.setForeground(Color.BLUE);
+        newAnalysis.setText("<html>" + "Start analysis of a new neuron" + "</html>");
+
+        // Making button delete current data 
+        newAnalysis.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent a) {
+                circle1Counter = 0;
+                circle2Counter = 0;
+                circle3Counter = 0;
+                circle4Counter = 0;
+                circle5Counter = 0;
+                positionInArrayList = -1;
+                lastEntryCircle1 = 0;
+                lastEntryCircle2 = 0;
+                lastEntryCircle3 = 0;
+                lastEntryCircle4 = 0;
+                lastEntryCircle5 = 0;
+                segmentNamesList.clear();
+                segmentName.setText("");
+                startCoordinateX.setValue(Integer.valueOf(0));
+                startCoordinateY.setValue(Integer.valueOf(0));
+                endCoordinateX.setValue(Integer.valueOf(0));
+                endCoordinateY.setValue(Integer.valueOf(0));
+            }
+        }
+        );
 
         layeredPane.add(segmentNameInstructions);
         layeredPane.add(segmentName);
@@ -240,6 +360,8 @@ public class ShollAnalysisBot extends JFrame {
         layeredPane.add(circleButtonEnter);
         layeredPane.add(segmentButtonEnter);
         layeredPane.add(showProgress);
+        layeredPane.add(deleteLastEntry);
+        layeredPane.add(newAnalysis);
         InputWindow.setContentPane(layeredPane);
     }
 
