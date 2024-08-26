@@ -261,14 +261,14 @@ public class ShollAnalysisBot extends JFrame {
 
                 // Formatting text that displays the name of segments scanned so far
                 JLabel segmentNames = new JLabel();
-                segmentNames.setBounds(25, 10, 200 , 100);
+                segmentNames.setBounds(25, 10, 400 , 300);
                 segmentNames.setFont(defaultFont);
                 segmentNames.setText("<html>" + "Segments scanned so far: " + (String) segmentNamesList.toString()
                     + "</html>");
 
                 // Formatting text that displays the number of intersections for each circle so far
                 JLabel circleCountDisplay = new JLabel();
-                circleCountDisplay.setBounds(25, 50, 400, 300);
+                circleCountDisplay.setBounds(25, 275, 400, 200);
                 circleCountDisplay.setFont(defaultFont);
                 circleCountDisplay.setText("<html>" + "Circle 1: " + circle1Counter + ", "
                     + "Circle 2: " + circle2Counter + ", "
@@ -278,7 +278,7 @@ public class ShollAnalysisBot extends JFrame {
 
                 // Formatting text that displays the current circle radius
                 JLabel circleCenterDisplay = new JLabel();
-                circleCenterDisplay.setBounds(25, 100, 200, 50);
+                circleCenterDisplay.setBounds(25, 400, 200, 50);
                 circleCenterDisplay.setFont(defaultFont);
                 circleCenterDisplay.setText("<html>" + "Circle center X: " + circleCenterXValue
                     + ", Circle center Y: " + circleCenterYValue);
