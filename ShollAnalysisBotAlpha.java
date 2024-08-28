@@ -69,23 +69,22 @@ public class ShollAnalysisBotAlpha extends JFrame{
 
         // Instructions for X, Y coordinates of circle
         JLabel circleInstructions = new JLabel();
-        circleInstructions.setBounds(0, 250, 1000, 50);
         circleInstructions.setText("<html>" + "Type the X coordinates of the circle's center in the top box and the Y coordinates in the bottom"
             + "</html>");
+        circleInstructions.setBounds(0, 250, 1000, 50);
         circleInstructions.setFont(defaultFont);
 
         // Text field to paste X coordinates of circle center
         xCircle = new JTextField();
         xCircle.setBounds(0, 300, 1000, 50);
         xCircle.setFont(defaultFont);
-        int circleCenterXValue = Integer.parseInt(xCircle.getText());
+
 
         // Text field to paste Y coordinates of circle center
         yCircle = new JTextField();
         yCircle.setBounds(0, 350, 1000, 50);
         yCircle.setFont(defaultFont);
-        int circleCenterYValue = Integer.parseInt(yCircle.getText());
-
+        
         // Formatting button to start analysis
         runAnalysis = new JButton();
         runAnalysis.setBounds(0, 400, 500, 50);
@@ -98,6 +97,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
         runAnalysis.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent a) {
+                // Setting the coordinates of the circle center
+                int circleCenterXValue = Integer.parseInt(xCircle.getText());
+                int circleCenterYValue = Integer.parseInt(yCircle.getText());
+
                 // Creating String array of segment names
                 String segmentNamesTempOrigin = (String) segmentNames.getText();
                 String [] segmentNamesTemp = (segmentNamesTempOrigin).split(" ");
@@ -152,8 +155,37 @@ public class ShollAnalysisBotAlpha extends JFrame{
                             circle5Counter ++;
                         } 
                         segmentBeginningIndex = i+1;
-                    }                                       
+                    } else if ((i+1) == segmentNamesTemp.length-1) { // To analyze the last segment
+                        segmentEndingIndex = i+1;
+                        segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
+                        segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
+                        // Finding the radial distance of the start point
+                        double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
+                                            Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
+                        // Finding the radial distance of the end point
+                        double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
+                                            Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
+                        if (startRadius <= 12.48 && endRadius > 12.48) {
+                            circle1Counter ++;
+                        } 
+                        if (startRadius <= 24.36 && endRadius > 24.36) {
+                            circle2Counter ++;
+                        } 
+                        if (startRadius <= 36.24 && endRadius > 36.24) {
+                            circle3Counter ++;
+                        }                         
+                        if (startRadius <= 48.12 && endRadius > 48.12) {
+                            circle4Counter ++;
+                        }                        
+                        if (startRadius <= 60 && endRadius > 60) {
+                            circle5Counter ++;
+                        } 
+                        segmentBeginningIndex = i+1;
+                    }
+                                                     
                 }
+                System.out.println(circle1Counter);      
+                System.out.println(circle5Counter);
             }
             }
         );
@@ -163,6 +195,36 @@ public class ShollAnalysisBotAlpha extends JFrame{
         showAnalysis.setForeground(Color.BLUE);
         showAnalysis.setText("<html>" + "Show analysis" + "</html>");
         showAnalysis.setFont(defaultFont);
+
+        showAnalysis.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent a) {
+                // Formatting popup window that will show analysis
+                JFrame popupAnalysis = new JFrame();
+                popupAnalysis.setSize(500, 500);
+                popupAnalysis.setVisible(true);
+                popupAnalysis.setTitle("Analysis Results");
+
+                // Text to display results in popup window
+                JLabel circleCountResults = new JLabel();
+                circleCountResults.setBounds(0, 50, 500, 450);
+                circleCountResults.setFont(defaultFont);
+                circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "/n" +
+                    "Circle 2: " + circle2Counter + "/n" +
+                    "Circle 1: " + circle3Counter + "/n" +
+                    "Circle 1: " + circle4Counter + "/n" +
+                    "Circle 1: " + circle5Counter + "/n" );
+
+                circle1Counter = 0;
+                circle2Counter = 0;
+                circle3Counter = 0;
+                circle4Counter = 0;
+                circle5Counter = 0;
+                circleCenterXValue = 0;
+                circleCenterYValue = 0;
+            }
+        }
+        );
 
 
         layeredPane = new JLayeredPane();
