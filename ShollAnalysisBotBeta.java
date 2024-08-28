@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.Math;
 
-public class ShollAnalysisBot extends JFrame {
+public class ShollAnalysisBotBeta extends JFrame {
     // Integer variables to store the number of dendrite crossings for each concentric circle
     int circle1Counter;
     int circle2Counter;
@@ -50,7 +50,7 @@ public class ShollAnalysisBot extends JFrame {
     /**
      *  Input window where dendrite segment data will be entered
     */
-    public ShollAnalysisBot () {
+    public ShollAnalysisBotBeta () {
         // Setting up format of the main window
         int frameWidth = 1000;
         int frameHeight = 500;
@@ -369,7 +369,7 @@ public class ShollAnalysisBot extends JFrame {
     }
 
     public static void main (String[] args) {
-        ShollAnalysisBot app = new ShollAnalysisBot();
+        ShollAnalysisBotBeta app = new ShollAnalysisBotBeta();
         app.setVisible(true);
     }
 }
