@@ -209,11 +209,13 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 JLabel circleCountResults = new JLabel();
                 circleCountResults.setBounds(0, 50, 500, 450);
                 circleCountResults.setFont(defaultFont);
-                circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "/n" +
-                    "Circle 2: " + circle2Counter + "/n" +
-                    "Circle 1: " + circle3Counter + "/n" +
-                    "Circle 1: " + circle4Counter + "/n" +
-                    "Circle 1: " + circle5Counter + "/n" );
+                circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "\n" +
+                    "Circle 2: " + circle2Counter + "\n" +
+                    "Circle 3: " + circle3Counter + "\n" +
+                    "Circle 4: " + circle4Counter + "\n" +
+                    "Circle 5: " + circle5Counter + "\n" );
+
+                popupAnalysis.add(circleCountResults);
 
                 circle1Counter = 0;
                 circle2Counter = 0;
