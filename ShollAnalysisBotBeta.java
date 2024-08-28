@@ -338,6 +338,8 @@ public class ShollAnalysisBot extends JFrame {
                 startCoordinateY.setValue(Integer.valueOf(0));
                 endCoordinateX.setValue(Integer.valueOf(0));
                 endCoordinateY.setValue(Integer.valueOf(0));
+                circleCenterX.setValue(Integer.valueOf(0));
+                circleCenterY.setValue(Integer.valueOf(0));
                 circleCenterXValue = 0;
                 circleCenterYValue = 0;
             }
