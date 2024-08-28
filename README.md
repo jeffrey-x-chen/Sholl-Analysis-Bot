@@ -7,3 +7,5 @@ from a manually traced neuron using the ImageScience plugin on ImageJ Fiji. The 
 then meant to input the first and last coordinate of each segment. When the user is
 finished, they can acess the number of dendrite intersections for each concentric
 circle.
+
+The beta version is an inefficient version that I created first.
