@@ -152,7 +152,6 @@ public class ShollAnalysisBotAlpha extends JFrame{
                             circle5Counter ++;
                         } 
                         segmentBeginningIndex = i+1;
-                        
                     }                                       
                 }
             }
@@ -161,9 +160,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
         
         showAnalysis = new JButton();
         showAnalysis.setBounds(500, 400, 500, 50);
-        showAnalysis.setFont(defaultFont);
-        showAnalysis.setText("<html>" + "Show analysis" + "</html>");
         showAnalysis.setForeground(Color.BLUE);
+        showAnalysis.setText("<html>" + "Show analysis" + "</html>");
+        showAnalysis.setFont(defaultFont);
+
 
         layeredPane = new JLayeredPane();
 
