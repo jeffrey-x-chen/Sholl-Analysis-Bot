@@ -217,6 +217,13 @@ public class ShollAnalysisBotAlpha extends JFrame{
 
                 popupAnalysis.add(circleCountResults);
 
+                // Resets the values of text fields after completing analysis
+                segmentNames.setText("");
+                xCoordinates.setText("");
+                yCoordinates.setText("");
+                xCircle.setText("");
+                yCircle.setText("");
+
                 circle1Counter = 0;
                 circle2Counter = 0;
                 circle3Counter = 0;
