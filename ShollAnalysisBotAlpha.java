@@ -259,7 +259,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 // Formatting popup window that values will be entered into
                 JFrame setParametersFrame = new JFrame("Setting Parameters");
                 int setParametersFrameWidth = 500;
-                int setParametersFrameHeight = 500;
+                int setParametersFrameHeight = 300;
                 setParametersFrame.setSize(setParametersFrameWidth, setParametersFrameHeight);
 
                 // Instruction text to enter the number of circles
@@ -356,6 +356,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
         inputWindow.setVisible(true);
     }
 
+    /**
+     * This method stores the concentric circle values (number of circles, inner radius, outer radius) inputted into the 
+     * window's text fields.
+     */
     public void storeConcentricValues () {
         circleQuantityValue = Integer.parseInt(circleQuantity.getText());
         innerRadiusValue = Integer.parseInt(innerRadius.getText());
