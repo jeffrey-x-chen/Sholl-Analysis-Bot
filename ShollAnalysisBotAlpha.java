@@ -16,6 +16,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
     // Coordinates of the center of the circle
     int circleCenterXValue;
     int circleCenterYValue;
+    // Concentric circle parameters
+    int circleQuantityValue;
+    int innerRadiusValue;
+    int outerRadiusValue;
 
     int textFieldWidth = 1; // Setting width of text fields
 
@@ -29,6 +33,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
     private JButton showAnalysis; // Creating button to show the analysis
     private JButton setParameters; // Creating a button to set the circle properties of Analysis
     private JPanel mainPanel; // Main panel that components will be displayed on
+
+    private JTextField circleQuantity; // Text field to enter amount of concentric circles in
+    private JTextField innerRadius; // Text field to enter the inner radius in
+    private JTextField outerRadius; // Text field to enter the outer radius in
 
     int fontSize = 13; // Setting font size
     Font defaultFont = new Font("Courier", Font.BOLD, fontSize); // Creating default font
@@ -85,7 +93,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
         runAnalysis.setBounds(0, 400, 500, 50);
         runAnalysis.setFont(defaultFont);
         runAnalysis.setForeground(Color.RED);
-        runAnalysis.setText("Analyze");
+        runAnalysis.setText("<html>" + "Analyze" + "</html>");
         inputWindow.getRootPane().setDefaultButton(runAnalysis);
 
         // Coding analysis/ function of button
@@ -261,7 +269,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 circleQuantityInstructions.setFont(defaultFont);
 
                 // Entering the number of circles
-                JTextField circleQuantity = new JTextField(textFieldWidth);
+                circleQuantity = new JTextField(textFieldWidth);
                 circleQuantity.setFont(defaultFont);
 
                 // Instruction text to enter the inner radius
@@ -270,7 +278,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 innerRadiusInstructions.setFont(defaultFont);
 
                 // Entering the inner circle radius
-                JTextField innerRadius = new JTextField(textFieldWidth);
+                innerRadius = new JTextField(textFieldWidth);
                 innerRadius.setFont(defaultFont);
 
                 // Instruction text to enter the outer radius
@@ -279,19 +287,35 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 outerRadiusInstructions.setFont(defaultFont);
 
                 // Entering the inner circle radius
-                JTextField outerRadius = new JTextField(textFieldWidth);
+                outerRadius = new JTextField(textFieldWidth);
                 outerRadius.setFont(defaultFont);
 
+                // Button to store the values
+                JButton storeCircleValueButton = new JButton();
+                storeCircleValueButton.setText("<html>" + "Store Values" + "</html>");
+                storeCircleValueButton.setFont(defaultFont);
+                setParametersFrame.getRootPane().setDefaultButton(storeCircleValueButton);
+
+                storeCircleValueButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed (ActionEvent a) {
+                        storeConcentricValues();
+                        setParametersFrame.dispose();
+                    }
+                });
+
                 JPanel parameterPanel = new JPanel();
-                parameterPanel.setLayout(new GridLayout(6, 0));
+                parameterPanel.setLayout(new GridLayout(7, 0));
                 parameterPanel.setPreferredSize(new Dimension(setParametersFrameWidth-50, 
                     setParametersFrameHeight-50));
+                //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
                 parameterPanel.add(circleQuantityInstructions); // 1
                 parameterPanel.add(circleQuantity); // 2
                 parameterPanel.add(innerRadiusInstructions); // 3
                 parameterPanel.add(innerRadius); // 4
                 parameterPanel.add(outerRadiusInstructions); // 5
                 parameterPanel.add(outerRadius); // 6
+                parameterPanel.add(storeCircleValueButton); // 7
 
                 JScrollPane scrollParameter = new JScrollPane(parameterPanel);
                 scrollParameter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -330,6 +354,12 @@ public class ShollAnalysisBotAlpha extends JFrame{
         inputWindow.getContentPane().add(scroll);
         scroll.setVisible(true);
         inputWindow.setVisible(true);
+    }
+
+    public void storeConcentricValues () {
+        circleQuantityValue = Integer.parseInt(circleQuantity.getText());
+        innerRadiusValue = Integer.parseInt(innerRadius.getText());
+        outerRadiusValue = Integer.parseInt(outerRadius.getText());
     }
 
     public static void main (String[] args) {
