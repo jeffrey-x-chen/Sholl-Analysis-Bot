@@ -17,6 +17,8 @@ public class ShollAnalysisBotAlpha extends JFrame{
     int circleCenterXValue;
     int circleCenterYValue;
 
+    int textFieldWidth = 1; // Setting width of text fields
+
     private JFrame inputWindow; // Creating main window
     private JTextField segmentNames; // Creating text field to paste in the segment names
     private JTextField xCoordinates; // Creating text field to paste in the X coordinates for the vertices
@@ -25,17 +27,16 @@ public class ShollAnalysisBotAlpha extends JFrame{
     private JTextField yCircle; // Creating text field to paste in the Y coordinates of the circle center
     private JButton runAnalysis; // Creating button to start the analysis
     private JButton showAnalysis; // Creating button to show the analysis
-    private JLayeredPane layeredPane; // Allows me to layer components
+    private JButton setParameters; // Creating a button to set the circle properties of Analysis
+    private JPanel mainPanel; // Main panel that components will be displayed on
 
     int fontSize = 13; // Setting font size
     Font defaultFont = new Font("Courier", Font.BOLD, fontSize); // Creating default font
 
     public ShollAnalysisBotAlpha () {
         inputWindow = new JFrame();
-        inputWindow.setSize(1000, 500);
+        inputWindow.setSize(700, 500);
         inputWindow.setTitle("Main Input Window");
-        inputWindow.setVisible(true);
-        inputWindow.setLayout(null);
         inputWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputWindow.setLocationRelativeTo(null);
 
@@ -46,7 +47,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
         segmentInstructions.setFont(defaultFont);
 
         // Text field to paste segment names
-        segmentNames = new JTextField();
+        segmentNames = new JTextField(textFieldWidth);
         segmentNames.setBounds(0, 50, 1000, 50);
         segmentNames.setFont(defaultFont);
 
@@ -58,12 +59,12 @@ public class ShollAnalysisBotAlpha extends JFrame{
         coordinateInstructions.setFont(defaultFont);
 
         // Text field to paste X coordinates
-        xCoordinates = new JTextField();
+        xCoordinates = new JTextField(textFieldWidth);
         xCoordinates.setBounds(0, 150, 1000, 50);
         xCoordinates.setFont(defaultFont);
 
         // Text field to paste Y coordinates
-        yCoordinates = new JTextField();
+        yCoordinates = new JTextField(textFieldWidth);
         yCoordinates.setBounds(0, 200, 1000, 50);
         yCoordinates.setFont(defaultFont);
 
@@ -75,13 +76,13 @@ public class ShollAnalysisBotAlpha extends JFrame{
         circleInstructions.setFont(defaultFont);
 
         // Text field to paste X coordinates of circle center
-        xCircle = new JTextField();
+        xCircle = new JTextField(textFieldWidth);
         xCircle.setBounds(0, 300, 1000, 50);
         xCircle.setFont(defaultFont);
 
 
         // Text field to paste Y coordinates of circle center
-        yCircle = new JTextField();
+        yCircle = new JTextField(textFieldWidth);
         yCircle.setBounds(0, 350, 1000, 50);
         yCircle.setFont(defaultFont);
         
@@ -201,13 +202,16 @@ public class ShollAnalysisBotAlpha extends JFrame{
             public void actionPerformed (ActionEvent a) {
                 // Formatting popup window that will show analysis
                 JFrame popupAnalysis = new JFrame();
-                popupAnalysis.setSize(500, 500);
+                int popupAnalysisWidth = 400;
+                int popupAnalysisHeight = 300;
+                popupAnalysis.setSize(popupAnalysisWidth, popupAnalysisHeight);
                 popupAnalysis.setVisible(true);
                 popupAnalysis.setTitle("Analysis Results");
 
                 // Text to display results in popup window
                 JLabel circleCountResults = new JLabel();
-                circleCountResults.setBounds(0, 50, 500, 450);
+                circleCountResults.setBounds(0, popupAnalysisHeight/10
+                    , popupAnalysisWidth, popupAnalysisHeight);
                 circleCountResults.setFont(defaultFont);
                 circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "\n" +
                     "Circle 2: " + circle2Counter + "\n" +
@@ -235,20 +239,56 @@ public class ShollAnalysisBotAlpha extends JFrame{
         }
         );
 
+        setParameters = new JButton();
+        setParameters.setForeground(Color.GREEN);
+        setParameters.setText("<html>" + "Set Parameters" + "</html>");
+        setParameters.setFont(defaultFont);
+        setParameters.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                
+            }
+        }
+        );
 
-        layeredPane = new JLayeredPane();
+        
+        mainPanel = new JPanel();
+        // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
+        mainPanel.setLayout(new GridLayout(11, 0));
+        mainPanel.setPreferredSize(new Dimension (650, 400));
 
-        layeredPane.add(segmentInstructions);
-        layeredPane.add(segmentNames);
-        layeredPane.add(coordinateInstructions);
-        layeredPane.add(xCoordinates);
-        layeredPane.add(yCoordinates);
-        layeredPane.add(runAnalysis);
-        layeredPane.add(circleInstructions);
-        layeredPane.add(xCircle);
-        layeredPane.add(yCircle);
-        layeredPane.add(showAnalysis);
-        inputWindow.setContentPane(layeredPane);
+        mainPanel.add(segmentInstructions); //1
+        mainPanel.add(segmentNames); //2
+        mainPanel.add(coordinateInstructions); //3
+        mainPanel.add(xCoordinates); //4
+        mainPanel.add(yCoordinates); //5
+        mainPanel.add(runAnalysis); //6
+        mainPanel.add(circleInstructions); //7
+        mainPanel.add(xCircle); //8
+        mainPanel.add(yCircle); //9
+        mainPanel.add(showAnalysis); //10
+        mainPanel.add(setParameters); //11
+
+        JScrollPane scroll = new JScrollPane(mainPanel);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        inputWindow.getContentPane().add(scroll);
+        scroll.setVisible(true);
+        inputWindow.setVisible(true);
+
+
+        /* 
+        JPanel panel = new JPanel();
+        JLabel text = new JLabel("Scroll");
+        panel.add(text);
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        inputWindow.getContentPane().add(scroll);
+        scroll.setVisible(true);
+        inputWindow.setVisible(true);
+        */
     }
 
     public static void main (String[] args) {
