@@ -35,7 +35,9 @@ public class ShollAnalysisBotAlpha extends JFrame{
 
     public ShollAnalysisBotAlpha () {
         inputWindow = new JFrame();
-        inputWindow.setSize(700, 500);
+        int inputWindowWidth = 700;
+        int inputWindowHeight = 500;
+        inputWindow.setSize(inputWindowWidth, inputWindowHeight);
         inputWindow.setTitle("Main Input Window");
         inputWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputWindow.setLocationRelativeTo(null);
@@ -43,47 +45,39 @@ public class ShollAnalysisBotAlpha extends JFrame{
         // Instructions for segment input
         JLabel segmentInstructions = new JLabel();
         segmentInstructions.setText("<html>" + "Paste segment names here: " + "</html>");
-        segmentInstructions.setBounds(0, 0, 1000, 50);
         segmentInstructions.setFont(defaultFont);
 
         // Text field to paste segment names
         segmentNames = new JTextField(textFieldWidth);
-        segmentNames.setBounds(0, 50, 1000, 50);
         segmentNames.setFont(defaultFont);
 
         // Instructions for X, Y coordinate input
         JLabel coordinateInstructions = new JLabel();
         coordinateInstructions.setText("<html>" + "Paste the X coordinates in the top box, and the Y coordinates in the bottom"
             + "</html>");
-        coordinateInstructions.setBounds(0, 100, 1000, 50);
         coordinateInstructions.setFont(defaultFont);
 
         // Text field to paste X coordinates
         xCoordinates = new JTextField(textFieldWidth);
-        xCoordinates.setBounds(0, 150, 1000, 50);
         xCoordinates.setFont(defaultFont);
 
         // Text field to paste Y coordinates
         yCoordinates = new JTextField(textFieldWidth);
-        yCoordinates.setBounds(0, 200, 1000, 50);
         yCoordinates.setFont(defaultFont);
 
         // Instructions for X, Y coordinates of circle
         JLabel circleInstructions = new JLabel();
         circleInstructions.setText("<html>" + "Type the X coordinates of the circle's center in the top box and the Y coordinates in the bottom"
             + "</html>");
-        circleInstructions.setBounds(0, 250, 1000, 50);
         circleInstructions.setFont(defaultFont);
 
         // Text field to paste X coordinates of circle center
         xCircle = new JTextField(textFieldWidth);
-        xCircle.setBounds(0, 300, 1000, 50);
         xCircle.setFont(defaultFont);
 
 
         // Text field to paste Y coordinates of circle center
         yCircle = new JTextField(textFieldWidth);
-        yCircle.setBounds(0, 350, 1000, 50);
         yCircle.setFont(defaultFont);
         
         // Formatting button to start analysis
@@ -205,13 +199,15 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 int popupAnalysisWidth = 400;
                 int popupAnalysisHeight = 300;
                 popupAnalysis.setSize(popupAnalysisWidth, popupAnalysisHeight);
-                popupAnalysis.setVisible(true);
                 popupAnalysis.setTitle("Analysis Results");
+                
+                // Formatting panel
+                JPanel analysisPanel = new JPanel();
+                analysisPanel.setLayout(new GridLayout(1, 1));
+                analysisPanel.setPreferredSize(new Dimension (300, 200));
 
                 // Text to display results in popup window
                 JLabel circleCountResults = new JLabel();
-                circleCountResults.setBounds(0, popupAnalysisHeight/10
-                    , popupAnalysisWidth, popupAnalysisHeight);
                 circleCountResults.setFont(defaultFont);
                 circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "\n" +
                     "Circle 2: " + circle2Counter + "\n" +
@@ -219,7 +215,13 @@ public class ShollAnalysisBotAlpha extends JFrame{
                     "Circle 4: " + circle4Counter + "\n" +
                     "Circle 5: " + circle5Counter + "\n" );
 
-                popupAnalysis.add(circleCountResults);
+                analysisPanel.add(circleCountResults);
+                JScrollPane scrollAnalysis = new JScrollPane(analysisPanel);
+                scrollAnalysis.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scrollAnalysis.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                popupAnalysis.getContentPane().add(scrollAnalysis);
+                popupAnalysis.setVisible(true);
+                scrollAnalysis.setVisible(true);
 
                 // Resets the values of text fields after completing analysis
                 segmentNames.setText("");
@@ -246,7 +248,58 @@ public class ShollAnalysisBotAlpha extends JFrame{
         setParameters.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent a) {
+                // Formatting popup window that values will be entered into
+                JFrame setParametersFrame = new JFrame("Setting Parameters");
+                int setParametersFrameWidth = 500;
+                int setParametersFrameHeight = 500;
+                setParametersFrame.setSize(setParametersFrameWidth, setParametersFrameHeight);
+
+                // Instruction text to enter the number of circles
+                JLabel circleQuantityInstructions = new JLabel();
+                circleQuantityInstructions.setText("<html>" + "Enter the amount of circles you want the neuron to be analyzed across below"
+                 + "</html>");
+                circleQuantityInstructions.setFont(defaultFont);
+
+                // Entering the number of circles
+                JTextField circleQuantity = new JTextField(textFieldWidth);
+                circleQuantity.setFont(defaultFont);
+
+                // Instruction text to enter the inner radius
+                JLabel innerRadiusInstructions = new JLabel();
+                innerRadiusInstructions.setText("<html>" + "Enter the inner radius of concentric circles below" + "</html>");
+                innerRadiusInstructions.setFont(defaultFont);
+
+                // Entering the inner circle radius
+                JTextField innerRadius = new JTextField(textFieldWidth);
+                innerRadius.setFont(defaultFont);
+
+                // Instruction text to enter the outer radius
+                JLabel outerRadiusInstructions = new JLabel();
+                outerRadiusInstructions.setText("<html>" + "Enter the outer radius of concentric circles below" + "</html>");
+                outerRadiusInstructions.setFont(defaultFont);
+
+                // Entering the inner circle radius
+                JTextField outerRadius = new JTextField(textFieldWidth);
+                outerRadius.setFont(defaultFont);
+
+                JPanel parameterPanel = new JPanel();
+                parameterPanel.setLayout(new GridLayout(6, 0));
+                parameterPanel.setPreferredSize(new Dimension(setParametersFrameWidth-50, 
+                    setParametersFrameHeight-50));
+                parameterPanel.add(circleQuantityInstructions); // 1
+                parameterPanel.add(circleQuantity); // 2
+                parameterPanel.add(innerRadiusInstructions); // 3
+                parameterPanel.add(innerRadius); // 4
+                parameterPanel.add(outerRadiusInstructions); // 5
+                parameterPanel.add(outerRadius); // 6
+
+                JScrollPane scrollParameter = new JScrollPane(parameterPanel);
+                scrollParameter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scrollParameter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 
+                setParametersFrame.getContentPane().add(scrollParameter);
+                scrollParameter.setVisible(true);
+                setParametersFrame.setVisible(true);
             }
         }
         );
@@ -255,19 +308,20 @@ public class ShollAnalysisBotAlpha extends JFrame{
         mainPanel = new JPanel();
         // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
         mainPanel.setLayout(new GridLayout(11, 0));
-        mainPanel.setPreferredSize(new Dimension (650, 400));
+        mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-50));
 
-        mainPanel.add(segmentInstructions); //1
-        mainPanel.add(segmentNames); //2
-        mainPanel.add(coordinateInstructions); //3
-        mainPanel.add(xCoordinates); //4
-        mainPanel.add(yCoordinates); //5
-        mainPanel.add(runAnalysis); //6
-        mainPanel.add(circleInstructions); //7
-        mainPanel.add(xCircle); //8
-        mainPanel.add(yCircle); //9
-        mainPanel.add(showAnalysis); //10
-        mainPanel.add(setParameters); //11
+        //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
+        mainPanel.add(segmentInstructions); // 1
+        mainPanel.add(segmentNames); // 2
+        mainPanel.add(coordinateInstructions); // 3
+        mainPanel.add(xCoordinates); // 4
+        mainPanel.add(yCoordinates); // 5
+        mainPanel.add(runAnalysis); // 6
+        mainPanel.add(circleInstructions); // 7
+        mainPanel.add(xCircle); // 8
+        mainPanel.add(yCircle); // 9
+        mainPanel.add(showAnalysis); // 10
+        mainPanel.add(setParameters); // 11
 
         JScrollPane scroll = new JScrollPane(mainPanel);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -276,19 +330,6 @@ public class ShollAnalysisBotAlpha extends JFrame{
         inputWindow.getContentPane().add(scroll);
         scroll.setVisible(true);
         inputWindow.setVisible(true);
-
-
-        /* 
-        JPanel panel = new JPanel();
-        JLabel text = new JLabel("Scroll");
-        panel.add(text);
-        JScrollPane scroll = new JScrollPane(panel);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        inputWindow.getContentPane().add(scroll);
-        scroll.setVisible(true);
-        inputWindow.setVisible(true);
-        */
     }
 
     public static void main (String[] args) {
