@@ -7,19 +7,28 @@ import java.lang.Math;
 import java.util.Arrays;
 
 public class ShollAnalysisBotAlpha extends JFrame{
+    /* 
     // Integer variables to store the number of dendrite crossings for each concentric circle
     int circle1Counter;
     int circle2Counter;
     int circle3Counter;
     int circle4Counter;
     int circle5Counter;
+    */
+
+    // Array List to store variable circle radius values
+    ArrayList <Double> circleRadii = new ArrayList <Double>();
+
+    // Array to store the number of dendrite crossings for each radius
+    int [] circleCounter;
+
     // Coordinates of the center of the circle
     int circleCenterXValue;
     int circleCenterYValue;
     // Concentric circle parameters
-    int circleQuantityValue;
-    int innerRadiusValue;
-    int outerRadiusValue;
+    double circleQuantityValue;
+    double innerRadiusValue;
+    double outerRadiusValue;
 
     int textFieldWidth = 1; // Setting width of text fields
 
@@ -100,30 +109,240 @@ public class ShollAnalysisBotAlpha extends JFrame{
         runAnalysis.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent a) {
-                // Setting the coordinates of the circle center
-                int circleCenterXValue = Integer.parseInt(xCircle.getText());
-                int circleCenterYValue = Integer.parseInt(yCircle.getText());
+                storeCircleCenter();
+                analysisMethod();
+            }
+            }
+        );
+        
+        showAnalysis = new JButton();
+        showAnalysis.setBounds(500, 400, 500, 50);
+        showAnalysis.setForeground(Color.BLUE);
+        showAnalysis.setText("<html>" + "Show analysis" + "</html>");
+        showAnalysis.setFont(defaultFont);
 
-                // Creating String array of segment names
-                String segmentNamesTempOrigin = (String) segmentNames.getText();
-                String [] segmentNamesTemp = (segmentNamesTempOrigin).split(" ");
+        showAnalysis.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent a) {
+                // Formatting popup window that will show analysis
+                JFrame popupAnalysis = new JFrame();
+                int popupAnalysisWidth = 400;
+                int popupAnalysisHeight = 300;
+                popupAnalysis.setSize(popupAnalysisWidth, popupAnalysisHeight);
+                popupAnalysis.setTitle("Analysis Results");
                 
-                // Creating integer array of X coordinates from inputted String type
-                String [] xCoordinatesTempOrigin = (xCoordinates.getText()).split(" ");
-                int [] xCoordinatesTemp = new int[xCoordinatesTempOrigin.length];
-                for (int i = 0; i < xCoordinatesTempOrigin.length; i++) {
-                    xCoordinatesTemp[i] = Integer.parseInt(xCoordinatesTempOrigin[i]);
-                }
+                // Formatting panel
+                JPanel analysisPanel = new JPanel();
+                analysisPanel.setLayout(new GridLayout(1, 1));
+                analysisPanel.setPreferredSize(new Dimension (300, 200));
 
-                // Creating integer array of Y coordinates from inputted String type
-                String[] yCoordinatesTempOrigin = (yCoordinates.getText()).split(" ");
-                int [] yCoordinatesTemp = new int[yCoordinatesTempOrigin.length];
-                for (int i = 0; i < yCoordinatesTempOrigin.length; i++) {
-                    yCoordinatesTemp[i] = Integer.parseInt(yCoordinatesTempOrigin[i]);
+                // Text to display results in popup window
+                JLabel circleCountResults = new JLabel();
+                circleCountResults.setFont(defaultFont);
+                String countResultsString = "Circle 1: " + circleCounter[0];
+                for (int i = 1; i < circleQuantityValue; i++) {
+                    String newString = " Circle " + (i+1) + ": "+ circleCounter[i];
+                    countResultsString += newString;
                 }
+                String finalCountResultsString = "<html>" + countResultsString + "</html>";
+                circleCountResults.setText(finalCountResultsString);
 
-                // Scanning for first and last vertex in a segment
-                int segmentBeginningIndex = 0;
+                analysisPanel.add(circleCountResults);
+                JScrollPane scrollAnalysis = new JScrollPane(analysisPanel);
+                scrollAnalysis.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scrollAnalysis.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                popupAnalysis.getContentPane().add(scrollAnalysis);
+                popupAnalysis.setVisible(true);
+                scrollAnalysis.setVisible(true);
+
+                /* 
+                // Resets the values of text fields after completing analysis
+                segmentNames.setText("");
+                xCoordinates.setText("");
+                yCoordinates.setText("");
+                xCircle.setText("");
+                yCircle.setText("");
+                
+
+                circleCenterXValue = 0;
+                circleCenterYValue = 0;
+                */
+            }
+        }
+        );
+
+        setParameters = new JButton();
+        setParameters.setForeground(Color.GREEN);
+        setParameters.setText("<html>" + "Set Parameters" + "</html>");
+        setParameters.setFont(defaultFont);
+        setParameters.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                // Formatting popup window that values will be entered into
+                JFrame setParametersFrame = new JFrame("Setting Parameters");
+                int setParametersFrameWidth = 500;
+                int setParametersFrameHeight = 300;
+                setParametersFrame.setSize(setParametersFrameWidth, setParametersFrameHeight);
+
+                // Instruction text to enter the number of circles
+                JLabel circleQuantityInstructions = new JLabel();
+                circleQuantityInstructions.setText("<html>" + "Enter the amount of circles you want the neuron to be analyzed across below"
+                 + "</html>");
+                circleQuantityInstructions.setFont(defaultFont);
+
+                // Entering the number of circles
+                circleQuantity = new JTextField(textFieldWidth);
+                circleQuantity.setFont(defaultFont);
+
+                // Instruction text to enter the inner radius
+                JLabel innerRadiusInstructions = new JLabel();
+                innerRadiusInstructions.setText("<html>" + "Enter the inner radius of concentric circles below" + "</html>");
+                innerRadiusInstructions.setFont(defaultFont);
+
+                // Entering the inner circle radius
+                innerRadius = new JTextField(textFieldWidth);
+                innerRadius.setFont(defaultFont);
+
+                // Instruction text to enter the outer radius
+                JLabel outerRadiusInstructions = new JLabel();
+                outerRadiusInstructions.setText("<html>" + "Enter the outer radius of concentric circles below" + "</html>");
+                outerRadiusInstructions.setFont(defaultFont);
+
+                // Entering the inner circle radius
+                outerRadius = new JTextField(textFieldWidth);
+                outerRadius.setFont(defaultFont);
+
+                // Button to store the values
+                JButton storeCircleValueButton = new JButton();
+                storeCircleValueButton.setText("<html>" + "Store Values" + "</html>");
+                storeCircleValueButton.setFont(defaultFont);
+                setParametersFrame.getRootPane().setDefaultButton(storeCircleValueButton);
+
+                storeCircleValueButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed (ActionEvent a) {
+                        storeConcentricValues();
+                        setCircleRadii();
+                        setParametersFrame.dispose();
+                    }
+                });
+
+                JPanel parameterPanel = new JPanel();
+                parameterPanel.setLayout(new GridLayout(7, 0));
+                parameterPanel.setPreferredSize(new Dimension(setParametersFrameWidth-50, 
+                    setParametersFrameHeight-50));
+                //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
+                parameterPanel.add(circleQuantityInstructions); // 1
+                parameterPanel.add(circleQuantity); // 2
+                parameterPanel.add(innerRadiusInstructions); // 3
+                parameterPanel.add(innerRadius); // 4
+                parameterPanel.add(outerRadiusInstructions); // 5
+                parameterPanel.add(outerRadius); // 6
+                parameterPanel.add(storeCircleValueButton); // 7
+
+                JScrollPane scrollParameter = new JScrollPane(parameterPanel);
+                scrollParameter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scrollParameter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                
+                setParametersFrame.getContentPane().add(scrollParameter);
+                scrollParameter.setVisible(true);
+                setParametersFrame.setVisible(true);
+            }
+        }
+        );
+
+        
+        mainPanel = new JPanel();
+        // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
+        mainPanel.setLayout(new GridLayout(11, 0));
+        mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-50));
+
+        //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
+        mainPanel.add(segmentInstructions); // 1
+        mainPanel.add(segmentNames); // 2
+        mainPanel.add(coordinateInstructions); // 3
+        mainPanel.add(xCoordinates); // 4
+        mainPanel.add(yCoordinates); // 5
+        mainPanel.add(circleInstructions); // 6
+        mainPanel.add(xCircle); // 7
+        mainPanel.add(yCircle); // 8
+        mainPanel.add(runAnalysis); // 9
+        mainPanel.add(showAnalysis); // 10
+        mainPanel.add(setParameters); // 11
+
+        JScrollPane scroll = new JScrollPane(mainPanel);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        inputWindow.getContentPane().add(scroll);
+        scroll.setVisible(true);
+        inputWindow.setVisible(true);
+    }
+
+    /**
+     * This method stores the concentric circle values (number of circles, inner radius, outer radius) inputted into the 
+     * window's text fields.
+     */
+    public void storeConcentricValues () {
+        circleQuantityValue = Integer.parseInt(circleQuantity.getText());
+        innerRadiusValue = Double.parseDouble(innerRadius.getText());
+        outerRadiusValue = Double.parseDouble(outerRadius.getText());
+    }
+
+    /**
+     * This method stores the inputted values of the circle's center into the variables of circleCenterXValue and circleCenterYValue
+     */
+    public void storeCircleCenter () {
+        int circleCenterXValue = Integer.parseInt(xCircle.getText());
+        int circleCenterYValue = Integer.parseInt(yCircle.getText());
+    }
+
+    /**
+     * This method adds the radii of each concentric circle to the Array List of radii (circleRadii) by calculating them from the outer 
+     * radius, inner radius, and amount of circles.
+     */
+    public void setCircleRadii () {
+        double radiusIncrement = (outerRadiusValue - innerRadiusValue)/(circleQuantityValue-1);
+        double initialRadius = innerRadiusValue;
+        circleRadii.add(initialRadius);
+        for (int i = 1; i < circleQuantityValue-1; i++) {
+            double currentRadius = initialRadius + radiusIncrement;
+            currentRadius = Math.floor(currentRadius * 100) / 100;
+            circleRadii.add(currentRadius);
+            initialRadius = currentRadius;
+        }
+        circleRadii.add(outerRadiusValue);
+        // System.out.println(circleRadii);
+    }
+
+    /**
+     * This is the main method to analyze the data by calculating the radius of individual segments
+     * and seeing which circles they cross
+     */
+    public void analysisMethod () {
+        // Creating String array of segment names
+        String segmentNamesTempOrigin = (String) segmentNames.getText();
+        String [] segmentNamesTemp = (segmentNamesTempOrigin).split(" ");
+
+        // Creating integer array of X coordinates from inputted String type
+        String [] xCoordinatesTempOrigin = (xCoordinates.getText()).split(" ");
+        int [] xCoordinatesTemp = new int[xCoordinatesTempOrigin.length];
+        for (int i = 0; i < xCoordinatesTempOrigin.length; i++) {
+            xCoordinatesTemp[i] = Integer.parseInt(xCoordinatesTempOrigin[i]);
+        }
+
+        // Creating integer array of Y coordinates from inputted String type
+        String[] yCoordinatesTempOrigin = (yCoordinates.getText()).split(" ");
+        int [] yCoordinatesTemp = new int[yCoordinatesTempOrigin.length];
+        for (int i = 0; i < yCoordinatesTempOrigin.length; i++) {
+            yCoordinatesTemp[i] = Integer.parseInt(yCoordinatesTempOrigin[i]);
+        }
+
+        // Creating circle counter array with the amount of inputted circles
+        circleCounter = new int [(int) circleQuantityValue];
+
+        /*
+         * int segmentBeginningIndex = 0;
                 int segmentEndingIndex = 0;
                 int segmentStartingX = 0;
                 int segmentStartingY = 0;
@@ -187,184 +406,57 @@ public class ShollAnalysisBotAlpha extends JFrame{
                     }
                                                      
                 }
-                System.out.println(circle1Counter);      
-                System.out.println(circle5Counter);
-            }
-            }
-        );
-        
-        showAnalysis = new JButton();
-        showAnalysis.setBounds(500, 400, 500, 50);
-        showAnalysis.setForeground(Color.BLUE);
-        showAnalysis.setText("<html>" + "Show analysis" + "</html>");
-        showAnalysis.setFont(defaultFont);
+         */
 
-        showAnalysis.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent a) {
-                // Formatting popup window that will show analysis
-                JFrame popupAnalysis = new JFrame();
-                int popupAnalysisWidth = 400;
-                int popupAnalysisHeight = 300;
-                popupAnalysis.setSize(popupAnalysisWidth, popupAnalysisHeight);
-                popupAnalysis.setTitle("Analysis Results");
-                
-                // Formatting panel
-                JPanel analysisPanel = new JPanel();
-                analysisPanel.setLayout(new GridLayout(1, 1));
-                analysisPanel.setPreferredSize(new Dimension (300, 200));
+        // Scanning for first and last vertex in a segment
+        int segmentBeginningIndex = 0;
+        int segmentEndingIndex = 0;
+        int segmentStartingX = 0;
+        int segmentStartingY = 0;
+        int segmentEndingX = 0;
+        int segmentEndingY = 0;
+        for (int i = 0; i < segmentNamesTemp.length-1; i++) {
+            segmentStartingX = xCoordinatesTemp[segmentBeginningIndex]; // Matching the coordinates from the indexes
+            segmentStartingY = yCoordinatesTemp[segmentBeginningIndex];
+            if (!segmentNamesTemp[i].equalsIgnoreCase(segmentNamesTemp[i+1])) {
+                segmentEndingIndex = i;
+                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
+                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
+                // Finding the radial distance of the start point
+                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
+                Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
+                // Finding the radial distance of the end point
+                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
+                Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
 
-                // Text to display results in popup window
-                JLabel circleCountResults = new JLabel();
-                circleCountResults.setFont(defaultFont);
-                circleCountResults.setText("<html>" + "Circle 1: " + circle1Counter + "\n" +
-                    "Circle 2: " + circle2Counter + "\n" +
-                    "Circle 3: " + circle3Counter + "\n" +
-                    "Circle 4: " + circle4Counter + "\n" +
-                    "Circle 5: " + circle5Counter + "\n" );
-
-                analysisPanel.add(circleCountResults);
-                JScrollPane scrollAnalysis = new JScrollPane(analysisPanel);
-                scrollAnalysis.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-                scrollAnalysis.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-                popupAnalysis.getContentPane().add(scrollAnalysis);
-                popupAnalysis.setVisible(true);
-                scrollAnalysis.setVisible(true);
-
-                // Resets the values of text fields after completing analysis
-                segmentNames.setText("");
-                xCoordinates.setText("");
-                yCoordinates.setText("");
-                xCircle.setText("");
-                yCircle.setText("");
-
-                circle1Counter = 0;
-                circle2Counter = 0;
-                circle3Counter = 0;
-                circle4Counter = 0;
-                circle5Counter = 0;
-                circleCenterXValue = 0;
-                circleCenterYValue = 0;
-            }
-        }
-        );
-
-        setParameters = new JButton();
-        setParameters.setForeground(Color.GREEN);
-        setParameters.setText("<html>" + "Set Parameters" + "</html>");
-        setParameters.setFont(defaultFont);
-        setParameters.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent a) {
-                // Formatting popup window that values will be entered into
-                JFrame setParametersFrame = new JFrame("Setting Parameters");
-                int setParametersFrameWidth = 500;
-                int setParametersFrameHeight = 300;
-                setParametersFrame.setSize(setParametersFrameWidth, setParametersFrameHeight);
-
-                // Instruction text to enter the number of circles
-                JLabel circleQuantityInstructions = new JLabel();
-                circleQuantityInstructions.setText("<html>" + "Enter the amount of circles you want the neuron to be analyzed across below"
-                 + "</html>");
-                circleQuantityInstructions.setFont(defaultFont);
-
-                // Entering the number of circles
-                circleQuantity = new JTextField(textFieldWidth);
-                circleQuantity.setFont(defaultFont);
-
-                // Instruction text to enter the inner radius
-                JLabel innerRadiusInstructions = new JLabel();
-                innerRadiusInstructions.setText("<html>" + "Enter the inner radius of concentric circles below" + "</html>");
-                innerRadiusInstructions.setFont(defaultFont);
-
-                // Entering the inner circle radius
-                innerRadius = new JTextField(textFieldWidth);
-                innerRadius.setFont(defaultFont);
-
-                // Instruction text to enter the outer radius
-                JLabel outerRadiusInstructions = new JLabel();
-                outerRadiusInstructions.setText("<html>" + "Enter the outer radius of concentric circles below" + "</html>");
-                outerRadiusInstructions.setFont(defaultFont);
-
-                // Entering the inner circle radius
-                outerRadius = new JTextField(textFieldWidth);
-                outerRadius.setFont(defaultFont);
-
-                // Button to store the values
-                JButton storeCircleValueButton = new JButton();
-                storeCircleValueButton.setText("<html>" + "Store Values" + "</html>");
-                storeCircleValueButton.setFont(defaultFont);
-                setParametersFrame.getRootPane().setDefaultButton(storeCircleValueButton);
-
-                storeCircleValueButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed (ActionEvent a) {
-                        storeConcentricValues();
-                        setParametersFrame.dispose();
+                // Adding dendrite intersections to their respective circles
+                for (i = 0; i < circleQuantityValue; i++) {
+                    if (startRadius <= circleRadii.get(i) && endRadius > circleRadii.get(i)) {
+                        circleCounter[i]++;
+                        System.out.println(i + "a" + circleCounter[i]);
                     }
-                });
-
-                JPanel parameterPanel = new JPanel();
-                parameterPanel.setLayout(new GridLayout(7, 0));
-                parameterPanel.setPreferredSize(new Dimension(setParametersFrameWidth-50, 
-                    setParametersFrameHeight-50));
-                //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
-                parameterPanel.add(circleQuantityInstructions); // 1
-                parameterPanel.add(circleQuantity); // 2
-                parameterPanel.add(innerRadiusInstructions); // 3
-                parameterPanel.add(innerRadius); // 4
-                parameterPanel.add(outerRadiusInstructions); // 5
-                parameterPanel.add(outerRadius); // 6
-                parameterPanel.add(storeCircleValueButton); // 7
-
-                JScrollPane scrollParameter = new JScrollPane(parameterPanel);
-                scrollParameter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-                scrollParameter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-                
-                setParametersFrame.getContentPane().add(scrollParameter);
-                scrollParameter.setVisible(true);
-                setParametersFrame.setVisible(true);
+                }
+            segmentBeginningIndex = i+1;
+            } else if ((i+1) == segmentNamesTemp.length-1) { // To analyze the last segment
+                segmentEndingIndex = i+1;
+                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
+                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
+                // Finding the radial distance of the start point
+                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
+                                    Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
+                // Finding the radial distance of the end point
+                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
+                                    Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
+                for (i = 0; i < circleQuantityValue; i++) {
+                    if (startRadius <= circleRadii.get(i) && endRadius > circleRadii.get(i)) {
+                        circleCounter[i]++;
+                        System.out.println(i + "a" + circleCounter[i]);
+                    }
+                }
+                segmentBeginningIndex = i+1;
             }
-        }
-        );
-
-        
-        mainPanel = new JPanel();
-        // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
-        mainPanel.setLayout(new GridLayout(11, 0));
-        mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-50));
-
-        //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
-        mainPanel.add(segmentInstructions); // 1
-        mainPanel.add(segmentNames); // 2
-        mainPanel.add(coordinateInstructions); // 3
-        mainPanel.add(xCoordinates); // 4
-        mainPanel.add(yCoordinates); // 5
-        mainPanel.add(runAnalysis); // 6
-        mainPanel.add(circleInstructions); // 7
-        mainPanel.add(xCircle); // 8
-        mainPanel.add(yCircle); // 9
-        mainPanel.add(showAnalysis); // 10
-        mainPanel.add(setParameters); // 11
-
-        JScrollPane scroll = new JScrollPane(mainPanel);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        inputWindow.getContentPane().add(scroll);
-        scroll.setVisible(true);
-        inputWindow.setVisible(true);
-    }
-
-    /**
-     * This method stores the concentric circle values (number of circles, inner radius, outer radius) inputted into the 
-     * window's text fields.
-     */
-    public void storeConcentricValues () {
-        circleQuantityValue = Integer.parseInt(circleQuantity.getText());
-        innerRadiusValue = Integer.parseInt(innerRadius.getText());
-        outerRadiusValue = Integer.parseInt(outerRadius.getText());
-    }
+        }   
+    }   
 
     public static void main (String[] args) {
         ShollAnalysisBotAlpha app = new ShollAnalysisBotAlpha();
