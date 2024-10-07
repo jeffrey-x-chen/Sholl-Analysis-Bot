@@ -341,6 +341,52 @@ public class ShollAnalysisBotAlpha extends JFrame{
         // Creating circle counter array with the amount of inputted circles
         circleCounter = new int [(int) circleQuantityValue];
 
+        // Scanning for first and last vertex in a segment
+        int segmentBeginningIndex = 0;
+        int segmentEndingIndex = 0;
+        int segmentStartingX = 0;
+        int segmentStartingY = 0;
+        int segmentEndingX = 0;
+        int segmentEndingY = 0;
+        for (int i = 0; i < segmentNamesTemp.length-1; i++) {            
+            segmentStartingX = xCoordinatesTemp[segmentBeginningIndex]; // Matching the coordinates from the indexes
+            segmentStartingY = yCoordinatesTemp[segmentBeginningIndex];
+            if (!segmentNamesTemp[i].equalsIgnoreCase(segmentNamesTemp[i+1])) {
+                segmentEndingIndex = i;
+                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
+                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
+                // Finding the radial distance of the start point
+                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
+                Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
+                // Finding the radial distance of the end point
+                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
+                Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
+
+                // Adding dendrite intersections to their respective circles
+                for (int z = 0; z < circleQuantityValue; z++) {
+                    if (startRadius <= circleRadii.get(z) && endRadius >= circleRadii.get(z)) {
+                        circleCounter[z]++;
+                    }
+                }
+                segmentBeginningIndex = i+1;
+            } else if ((i+1) == segmentNamesTemp.length-1) { // To analyze the last segment
+                segmentEndingIndex = i+1;
+                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
+                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
+                // Finding the radial distance of the start point
+                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
+                                    Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
+                // Finding the radial distance of the end point
+                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
+                                    Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
+                for (int x = 0; x < circleQuantityValue; x++) {
+                    if (startRadius <= circleRadii.get(x) && endRadius >= circleRadii.get(x)) {
+                        circleCounter[x]++;                    }
+                }
+                segmentBeginningIndex = i+1;
+            }
+        }
+
         /*
          * int segmentBeginningIndex = 0;
                 int segmentEndingIndex = 0;
@@ -406,56 +452,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                     }
                                                      
                 }
-         */
-
-        // Scanning for first and last vertex in a segment
-        int segmentBeginningIndex = 0;
-        int segmentEndingIndex = 0;
-        int segmentStartingX = 0;
-        int segmentStartingY = 0;
-        int segmentEndingX = 0;
-        int segmentEndingY = 0;
-        for (int i = 0; i < segmentNamesTemp.length-1; i++) {
-            segmentStartingX = xCoordinatesTemp[segmentBeginningIndex]; // Matching the coordinates from the indexes
-            segmentStartingY = yCoordinatesTemp[segmentBeginningIndex];
-            if (!segmentNamesTemp[i].equalsIgnoreCase(segmentNamesTemp[i+1])) {
-                segmentEndingIndex = i;
-                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
-                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
-                // Finding the radial distance of the start point
-                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
-                Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
-                // Finding the radial distance of the end point
-                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
-                Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
-
-                // Adding dendrite intersections to their respective circles
-                for (i = 0; i < circleQuantityValue; i++) {
-                    if (startRadius <= circleRadii.get(i) && endRadius > circleRadii.get(i)) {
-                        circleCounter[i]++;
-                        System.out.println(i + "a" + circleCounter[i]);
-                    }
-                }
-            segmentBeginningIndex = i+1;
-            } else if ((i+1) == segmentNamesTemp.length-1) { // To analyze the last segment
-                segmentEndingIndex = i+1;
-                segmentEndingX = xCoordinatesTemp[segmentEndingIndex];
-                segmentEndingY = yCoordinatesTemp[segmentEndingIndex];
-                // Finding the radial distance of the start point
-                double startRadius = Math.pow(Math.pow(segmentStartingX-circleCenterXValue, 2) +
-                                    Math.pow(segmentStartingY - circleCenterYValue, 2), 0.5);
-                // Finding the radial distance of the end point
-                double endRadius = Math.pow(Math.pow(segmentEndingX-circleCenterXValue, 2) +
-                                    Math.pow(segmentEndingY - circleCenterYValue, 2), 0.5);
-                for (i = 0; i < circleQuantityValue; i++) {
-                    if (startRadius <= circleRadii.get(i) && endRadius > circleRadii.get(i)) {
-                        circleCounter[i]++;
-                        System.out.println(i + "a" + circleCounter[i]);
-                    }
-                }
-                segmentBeginningIndex = i+1;
-            }
-        }   
+         */   
     }   
 
     public static void main (String[] args) {
