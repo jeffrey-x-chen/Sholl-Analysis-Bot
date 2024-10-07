@@ -67,12 +67,6 @@ public class ShollAnalysisBotAlpha extends JFrame{
         // Text field to paste segment names
         segmentNames = new JTextField(textFieldWidth);
         segmentNames.setFont(defaultFont);
-        segmentNames.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent a) {
-
-            }
-        });
 
         // Instructions for X, Y coordinate input
         JLabel coordinateInstructions = new JLabel();
@@ -402,7 +396,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 segmentBeginningIndex = i+1;
             }
         }
-    }   
+    } 
 
     public static void main (String[] args) {
         ShollAnalysisBotAlpha app = new ShollAnalysisBotAlpha();
