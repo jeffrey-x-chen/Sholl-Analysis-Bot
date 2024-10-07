@@ -321,11 +321,11 @@ public class ShollAnalysisBotAlpha extends JFrame{
      * and seeing which circles they cross
      */
     public void analysisMethod () {
-        /*
+        
         for (int i = 0; i < circleRadii.size(); i++) {
             System.out.println(circleRadii.get(i));
         }
-        */
+        
         // Creating String array of segment names
         String segmentNamesTempOrigin = (String) segmentNames.getText();
         String [] segmentNamesTemp = (segmentNamesTempOrigin).split(" ");
@@ -355,7 +355,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
         int segmentEndingX = 0;
         int segmentEndingY = 0;
         for (int i = 0; i < segmentNamesTemp.length-1; i++) {     
-            // System.out.println("Counting at " + i);       
+            System.out.println("Counting at " + i);       
             segmentStartingX = xCoordinatesTemp[segmentBeginningIndex]; // Matching the coordinates from the indexes
             segmentStartingY = yCoordinatesTemp[segmentBeginningIndex];
             if (!segmentNamesTemp[i].equalsIgnoreCase(segmentNamesTemp[i+1])) {
@@ -373,7 +373,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 for (int z = 0; z < circleQuantityValue; z++) {
                     if (startRadius <= circleRadii.get(z) && endRadius >= circleRadii.get(z)) {
                         circleCounter[z]++;
-                        // System.out.println(segmentEndingIndex + "a" + z + "a" + circleCounter[z]);
+                        System.out.println(segmentEndingIndex + "a" + z + "a" + circleCounter[z]);
                     }
                 }
                 segmentBeginningIndex = i+1;
@@ -390,7 +390,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 for (int x = 0; x < circleQuantityValue; x++) {
                     if (startRadius <= circleRadii.get(x) && endRadius >= circleRadii.get(x)) {
                         circleCounter[x]++;
-                        // System.out.println(segmentEndingIndex + "a" + x + "a" + circleCounter[x]);                    
+                        System.out.println(segmentEndingIndex + "a" + x + "a" + circleCounter[x]);                    
                     }
                 }
                 segmentBeginningIndex = i+1;
