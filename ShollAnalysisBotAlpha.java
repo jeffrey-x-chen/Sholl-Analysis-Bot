@@ -255,7 +255,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
         mainPanel = new JPanel();
         // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
         mainPanel.setLayout(new GridLayout(11, 0));
-        mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-50));
+        mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-60));
 
         //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
         mainPanel.add(segmentInstructions); // 1
