@@ -1,3 +1,4 @@
+/* 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -50,6 +51,7 @@ public class ShollAnalysisBotBeta extends JFrame {
     /**
      *  Input window where dendrite segment data will be entered
     */
+/* 
     public ShollAnalysisBotBeta () {
         // Setting up format of the main window
         int frameWidth = 1000;
@@ -170,6 +172,7 @@ public class ShollAnalysisBotBeta extends JFrame {
         /* Making button process the segment data including the circles it passes and 
             its ID
          */
+/*
         segmentButtonEnter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent a) {
@@ -373,3 +376,4 @@ public class ShollAnalysisBotBeta extends JFrame {
         app.setVisible(true);
     }
 }
+*/
