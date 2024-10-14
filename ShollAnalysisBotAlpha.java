@@ -7,15 +7,6 @@ import java.lang.Math;
 import java.util.Arrays;
 
 public class ShollAnalysisBotAlpha extends JFrame{
-    /* 
-    // Integer variables to store the number of dendrite crossings for each concentric circle
-    int circle1Counter;
-    int circle2Counter;
-    int circle3Counter;
-    int circle4Counter;
-    int circle5Counter;
-    */
-
     // Array List to store variable circle radius values
     ArrayList <Double> circleRadii = new ArrayList <Double>();
 
@@ -23,8 +14,8 @@ public class ShollAnalysisBotAlpha extends JFrame{
     int [] circleCounter;
 
     // Coordinates of the center of the circle
-    int circleCenterXValue;
-    int circleCenterYValue;
+    double circleCenterXValue;
+    double circleCenterYValue;
     // Concentric circle parameters
     double circleQuantityValue;
     double innerRadiusValue;
@@ -155,7 +146,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
                 popupAnalysis.setVisible(true);
                 scrollAnalysis.setVisible(true);
 
-                /* 
+                
                 // Resets the values of text fields after completing analysis
                 segmentNames.setText("");
                 xCoordinates.setText("");
@@ -166,7 +157,6 @@ public class ShollAnalysisBotAlpha extends JFrame{
 
                 circleCenterXValue = 0;
                 circleCenterYValue = 0;
-                */
             }
         }
         );
@@ -334,16 +324,16 @@ public class ShollAnalysisBotAlpha extends JFrame{
 
         // Creating integer array of X coordinates from inputted String type
         String [] xCoordinatesTempOrigin = (xCoordinates.getText()).split(" ");
-        int [] xCoordinatesTemp = new int[xCoordinatesTempOrigin.length];
+        double [] xCoordinatesTemp = new double[xCoordinatesTempOrigin.length];
         for (int i = 0; i < xCoordinatesTempOrigin.length; i++) {
-            xCoordinatesTemp[i] = Integer.parseInt(xCoordinatesTempOrigin[i]);
+            xCoordinatesTemp[i] = Double.parseDouble(xCoordinatesTempOrigin[i]);
         }
 
         // Creating integer array of Y coordinates from inputted String type
         String[] yCoordinatesTempOrigin = (yCoordinates.getText()).split(" ");
-        int [] yCoordinatesTemp = new int[yCoordinatesTempOrigin.length];
+        double [] yCoordinatesTemp = new double[yCoordinatesTempOrigin.length];
         for (int i = 0; i < yCoordinatesTempOrigin.length; i++) {
-            yCoordinatesTemp[i] = Integer.parseInt(yCoordinatesTempOrigin[i]);
+            yCoordinatesTemp[i] = Double.parseDouble(yCoordinatesTempOrigin[i]);
         }
 
         // Creating circle counter array with the amount of inputted circles
@@ -352,10 +342,10 @@ public class ShollAnalysisBotAlpha extends JFrame{
         // Scanning for first and last vertex in a segment
         int segmentBeginningIndex = 0;
         int segmentEndingIndex = 0;
-        int segmentStartingX = 0;
-        int segmentStartingY = 0;
-        int segmentEndingX = 0;
-        int segmentEndingY = 0;
+        double segmentStartingX = 0;
+        double segmentStartingY = 0;
+        double segmentEndingX = 0;
+        double segmentEndingY = 0;
         for (int i = 0; i < segmentNamesTemp.length-1; i++) {
             // System.out.println ("Counting at " + i);            
             segmentStartingX = xCoordinatesTemp[segmentBeginningIndex]; // Matching the coordinates from the indexes
