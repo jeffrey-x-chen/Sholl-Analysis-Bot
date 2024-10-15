@@ -317,7 +317,6 @@ public class ShollAnalysisBotAlpha extends JFrame{
             System.out.println(circleRadii.get(i));
         }
         */
-        
 
         // Creating String array of segment names
         String segmentNamesTempOrigin = (String) segmentNames.getText();
