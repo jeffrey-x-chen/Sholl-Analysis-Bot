@@ -10,9 +10,6 @@ concentric circle.
 The Beta version is an inefficient version that I created first. The .jar file that
 will be used to run the program runs the Alpha version.
 
-// INSTRUCTIONS ARE CURRENTLY BEING UPDATED. THE BELOW INSTRUCTIONS ARE NOT ACCURATE
-TO THE FUNCTION OF THE PROGRAM. SORRY FOR THE DELAY.
-
 Instructions on how to use this program:
 1. To use the program as an app through the .jar file, you have to first download
 a JDK (Java Development Kit). To do this, you can download VS code and follow all
