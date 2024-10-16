@@ -32,6 +32,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
     private JButton runAnalysis; // Creating button to start the analysis
     private JButton showAnalysis; // Creating button to show the analysis
     private JButton setParameters; // Creating a button to set the circle properties of Analysis
+    private JButton showParameters; // Creating a button 
     private JPanel mainPanel; // Main panel that components will be displayed on
 
     private JTextField circleQuantity; // Text field to enter amount of concentric circles in
@@ -44,7 +45,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
     public ShollAnalysisBotAlpha () {
         inputWindow = new JFrame();
         int inputWindowWidth = 700;
-        int inputWindowHeight = 500;
+        int inputWindowHeight = 550;
         inputWindow.setSize(inputWindowWidth, inputWindowHeight);
         inputWindow.setTitle("Main Input Window");
         inputWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -241,10 +242,48 @@ public class ShollAnalysisBotAlpha extends JFrame{
         }
         );
 
+        showParameters = new JButton();
+        showParameters.setForeground(Color.ORANGE);
+        showParameters.setText("<html>" + "Show Parameters" + "</html>");
+        showParameters.setFont(defaultFont);
+        showParameters.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                // Formatting popup window that values will be entered into
+                JFrame showParametersFrame = new JFrame("Showing Parameters");
+                int showParametersFrameWidth = 500;
+                int showParametersFrameHeight = 300;
+                showParametersFrame.setSize(showParametersFrameWidth, showParametersFrameHeight);
+
+                // Instruction text to enter the number of circles
+                JLabel parameterText = new JLabel();
+                parameterText.setText("<html>" + "# of Circles: " + circleQuantityValue + "; Inner radius: "
+                    + innerRadiusValue + "; Outer radius: " + outerRadiusValue + "</html>");
+                parameterText.setFont(defaultFont);
+
+                JPanel showParameterPanel = new JPanel();
+                showParameterPanel.setLayout(new GridLayout(7, 0));
+                showParameterPanel.setPreferredSize(new Dimension(showParametersFrameWidth-50, 
+                    showParametersFrameHeight-50));
+                //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
+                showParameterPanel.add(parameterText);
+
+                JScrollPane scrollParameter = new JScrollPane(showParameterPanel);
+                scrollParameter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scrollParameter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                
+                showParametersFrame.getContentPane().add(scrollParameter);
+                scrollParameter.setVisible(true);
+                showParametersFrame.setVisible(true);
+            }
+        }
+        );
+
+
         
         mainPanel = new JPanel();
         // Setting layout of the panel, row number needs to equal component number to make the window properly formatted
-        mainPanel.setLayout(new GridLayout(11, 0));
+        mainPanel.setLayout(new GridLayout(12, 0));
         mainPanel.setPreferredSize(new Dimension (inputWindowWidth - 50, inputWindowHeight-60));
 
         //KEEP THIS ORDER THE SAME, OR ELSE COMPONENTS WILL BE FLIPPED ON PANEL
@@ -259,6 +298,7 @@ public class ShollAnalysisBotAlpha extends JFrame{
         mainPanel.add(runAnalysis); // 9
         mainPanel.add(showAnalysis); // 10
         mainPanel.add(setParameters); // 11
+        mainPanel.add(showParameters); // 12
 
         JScrollPane scroll = new JScrollPane(mainPanel);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
